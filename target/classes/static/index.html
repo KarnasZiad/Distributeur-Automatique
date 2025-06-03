@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VendingPro API</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #4a5568;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            color: #718096;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+        }
+        
+        .api-info {
+            background: #f7fafc;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .endpoint {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #667eea;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .method {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .get { background: #48bb78; color: white; }
+        .post { background: #ed8936; color: white; }
+        .put { background: #4299e1; color: white; }
+        .delete { background: #f56565; color: white; }
+        
+        .description {
+            color: #4a5568;
+            margin-top: 5px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .status {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛒 VendingPro API</h1>
+        <p class="subtitle">API REST pour Distributeur Automatique</p>
+        
+        <div class="status">
+            ✅ API Active et Fonctionnelle
+        </div>
+        
+        <div class="api-info">
+            <h2 style="color: #4a5568; margin-bottom: 20px;">📋 Endpoints Disponibles</h2>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <strong>/api/vending/products</strong>
+                <div class="description">Récupérer la liste des produits disponibles</div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <strong>/api/vending/insert-coin?coinValue={value}</strong>
+                <div class="description">Insérer une pièce (0.5, 1.0, 2.0, 5.0, 10.0 MAD)</div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <strong>/api/vending/balance</strong>
+                <div class="description">Consulter le solde actuel</div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <strong>/api/vending/select-product/{id}</strong>
+                <div class="description">Acheter un produit par son ID</div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <strong>/api/vending/cancel</strong>
+                <div class="description">Annuler la transaction et récupérer la monnaie</div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <strong>/api/vending/statistics</strong>
+                <div class="description">Consulter les statistiques du distributeur</div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <strong>/api/vending/health</strong>
+                <div class="description">Vérifier l'état de santé du système</div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <strong>/api/vending/alerts</strong>
+                <div class="description">Consulter les alertes système</div>
+            </div>
+            
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <strong>/api/vending/diagnostic</strong>
+                <div class="description">Lancer un diagnostic complet</div>
+            </div>
+        </div>
+        
+        <div style="background: #e2e8f0; border-radius: 10px; padding: 20px; margin: 20px 0;">
+            <h3 style="color: #4a5568; margin-bottom: 15px;">💡 Exemple d'utilisation</h3>
+            <div style="font-family: 'Courier New', monospace; background: white; padding: 15px; border-radius: 8px; text-align: left;">
+                <div style="color: #38a169;"># Récupérer les produits</div>
+                <div>curl -X GET http://localhost:8080/api/vending/products</div>
+                <br>
+                <div style="color: #38a169;"># Insérer une pièce de 2 MAD</div>
+                <div>curl -X POST "http://localhost:8080/api/vending/insert-coin?coinValue=2.0"</div>
+                <br>
+                <div style="color: #38a169;"># Acheter le produit ID 1</div>
+                <div>curl -X POST http://localhost:8080/api/vending/select-product/1</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>🚀 Backend Spring Boot | 💾 Base de données H2 | 🔄 API REST</p>
+            <p>Port: 8080 | Version: 1.0.0</p>
+        </div>
+    </div>
+</body>
+</html>
