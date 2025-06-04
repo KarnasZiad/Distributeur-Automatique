@@ -1,30 +1,28 @@
-# 🛒 Distributeur Automatique - Interface Web & API REST
+#  Distributeur Automatique - Interface Web & API REST
 
 Une application complète avec **interface graphique web moderne** et **API REST modulaire** pour un distributeur automatique qui gère les pièces, les produits, les transactions et le rendu de monnaie optimisé.
 
-## 🎯 Fonctionnalités
+##  Fonctionnalités
 
-- ✅ **Interface web interactive** et responsive
-- ✅ Accepte des pièces valides (0.5, 1, 2, 5, 10 MAD)
-- ✅ Affiche les produits disponibles avec prix et disponibilité
-- ✅ Permet la sélection de produits si le solde est suffisant
-- ✅ Distribue les produits et rend la monnaie optimisée
-- ✅ Gère l'annulation de la transaction
-- ✅ Animations et feedback visuel en temps réel
-- ✅ Messages de notification dynamiques
 
-## 🚀 Accès rapide
+-  Accepte des pièces valides (0.5, 1, 2, 5, 10 MAD)
+-  Affiche les produits disponibles avec prix et disponibilité
+-  Permet la sélection de produits si le solde est suffisant
+-  Distribue les produits et rend la monnaie optimisée
+-  Gère l'annulation de la transaction
+
+
+##  Accès rapide
 
 ### Interface Web
 - **URL principale** : `http://localhost:8080`
-- **Interface moderne** avec design responsive
 - **Interactions en temps réel** avec l'API
 
 ### API REST
 - **Base URL** : `http://localhost:8080/api/vending`
 - **Console H2** : `http://localhost:8080/h2-console`
 
-## 🛠️ Technologies utilisées
+## 🛠 Technologies utilisées
 
 ### Backend
 - **Spring Boot 3.2.0** - Framework principal
@@ -33,11 +31,6 @@ Une application complète avec **interface graphique web moderne** et **API REST
 - **Maven** - Gestion des dépendances
 - **Java 17** - Version Java
 
-### Frontend
-- **HTML5/CSS3** - Structure et style
-- **JavaScript ES6+** - Logique interactive
-- **Font Awesome** - Icônes
-- **CSS Grid/Flexbox** - Layout responsive
 
 ## Structure du projet
 
@@ -113,18 +106,10 @@ GET /transaction-status
 GET /valid-coins
 ```
 
-## 🎮 Guide d'utilisation
+##  Guide d'utilisation
 
-### Interface Web (Recommandé)
 
-1. **Accéder à l'interface** : `http://localhost:8080`
-2. **Insérer des pièces** : Cliquer sur les boutons de pièces (0.5, 1, 2, 5, 10 MAD)
-3. **Consulter le solde** : Affiché en temps réel dans l'en-tête
-4. **Sélectionner un produit** : Cliquer sur une carte produit disponible
-5. **Voir le résultat** : Modal avec détails de l'achat et monnaie rendue
-6. **Annuler si nécessaire** : Bouton "Annuler Transaction"
-
-### API REST (Pour développeurs)
+### API REST 
 
 #### Scénario complet d'achat
 
@@ -196,29 +181,9 @@ L'application utilise un algorithme glouton pour optimiser le rendu de monnaie :
 - Persistance des pièces insérées et du produit sélectionné
 - Calcul automatique de la monnaie à rendre
 
-## 🎨 Fonctionnalités de l'Interface Web
 
-### Design et UX
-- **Design moderne** avec dégradés et animations
-- **Interface responsive** adaptée mobile/desktop
-- **Icônes intuitives** pour chaque produit
-- **Feedback visuel** pour toutes les actions
 
-### Interactions dynamiques
-- **Animations de pièces** lors de l'insertion
-- **Mise à jour en temps réel** du solde et statut
-- **Messages de notification** avec auto-disparition
-- **Modal d'achat** avec détails complets
-- **États visuels** des produits (disponible/indisponible/solde insuffisant)
-
-### Fonctionnalités avancées
-- **Historique des pièces** insérées avec compteurs
-- **Calcul automatique** de la monnaie optimisée
-- **Gestion d'erreurs** avec messages explicites
-- **Loading states** pour les opérations asynchrones
-- **Actualisation automatique** des données
-
-## 💡 Points forts de l'implémentation
+##  Points forts de l'implémentation
 
 ### Backend
 1. **Modularité** : Séparation claire des responsabilités
@@ -227,36 +192,6 @@ L'application utilise un algorithme glouton pour optimiser le rendu de monnaie :
 4. **Performance** : Algorithme optimisé pour le rendu de monnaie
 5. **Maintenabilité** : Code bien structuré et testé
 
-### Frontend
-1. **Expérience utilisateur** : Interface intuitive et moderne
-2. **Réactivité** : Mise à jour en temps réel
-3. **Accessibilité** : Design responsive et icônes claires
-4. **Performance** : Chargement rapide et animations fluides
-5. **Documentation** : README complet avec exemples
 
-## 🎯 Exemple d'utilisation complète
 
-### Via l'interface web
-1. Ouvrir `http://localhost:8080`
-2. Insérer 5.0 MAD + 2.0 MAD (solde: 7.0 MAD)
-3. Cliquer sur "Coca-Cola" (2.5 MAD)
-4. Voir la modal : Produit acheté + Monnaie rendue (4.5 MAD optimisée)
 
-### Via l'API REST
-```bash
-# 1. Consulter les produits
-GET /api/vending/products
-
-# 2. Insérer des pièces
-POST /api/vending/insert-coin?coinValue=5.0
-POST /api/vending/insert-coin?coinValue=2.0
-
-# 3. Vérifier le solde (7.0 MAD)
-GET /api/vending/balance
-
-# 4. Acheter un produit (Coca-Cola 2.5 MAD)
-POST /api/vending/select-product/1
-# Retourne : Produit + Monnaie rendue (4.5 MAD optimisée)
-```
-
-Le projet est **prêt pour la production** avec une architecture solide, une interface moderne, des tests complets et une documentation détaillée ! 🎉
