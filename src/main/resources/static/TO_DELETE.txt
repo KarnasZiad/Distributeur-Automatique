@@ -1,0 +1,1 @@
+Supprimez les fichiers suivants pour enlever complètement l'ancien frontend : app.html, app.js, index.html, test.html, js/components/ (vide).

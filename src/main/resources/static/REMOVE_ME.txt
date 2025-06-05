@@ -1,0 +1,1 @@
+Ce fichier marque la suppression de l'ancien frontend. Tous les fichiers frontend précédents ont été supprimés pour repartir sur une base propre.
