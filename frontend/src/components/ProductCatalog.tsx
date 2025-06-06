@@ -39,11 +39,11 @@ const ProductCatalog: React.FC<ProductCatalogProps> = ({
   const getProductImage = (productId: string) => {
     const images: { [key: string]: string } = {
       '1': 'https://images.unsplash.com/photo-1554866585-cd94860890b7?w=200&h=200&fit=crop&crop=center', // Coca Cola
-      '2': 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=200&h=200&fit=crop&crop=center', // Chips
-      '3': 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=200&h=200&fit=crop&crop=center', // Eau minérale
+      '2': 'https://i5.walmartimages.com/asr/83568193-2418-40f0-8367-4fd80481e2f8_1.fc5284020d9e9b9bcd45d777a9e62bb5.jpeg', // Eau
+      '3': 'https://images.unsplash.com/photo-1566478989037-eec170784d0b?w=200&h=200&fit=crop&crop=center', // 
       '4': 'https://images.unsplash.com/photo-1511381939415-e44015466834?w=200&h=200&fit=crop&crop=center', // Sandwich
   
-      '5': 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=200&h=200&fit=crop&crop=center', // Biscuits
+      '5': 'https://th.bing.com/th/id/OIP.oFklGhB29JkqjT23QQEVWAHaHa?rs=1&pid=ImgDetMain', // Biscuits
       '6': 'https://images.unsplash.com/photo-1539252554453-80ab65ce3586?w=200&h=200&fit=crop&crop=center',
       '7': 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=200&h=200&fit=crop&crop=center', // Chocolat
       '8': 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=200&h=200&fit=crop&crop=center', // Cacahuètes

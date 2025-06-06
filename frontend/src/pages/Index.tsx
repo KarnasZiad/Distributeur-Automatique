@@ -10,8 +10,14 @@ import {
   insertCoin,
   selectProduct,
   fetchValidCoins,
-  bulkPurchase
+  bulkPurchase,
+  cancelTransaction
 } from '@/api/vending';
+
+interface CartItem {
+  product: Product;
+  quantity: number;
+}
 
 const Index = () => {
   const [balance, setBalance] = useState(0);
@@ -167,30 +173,109 @@ const Index = () => {
       setLoading(false);
     }
   };
+  const handleCancel = async () => {
+    if (balance === 0) {
+      toast({
+        title: 'Info',
+        description: 'Aucune monnaie à rendre.',
+      });
+      return;
+    }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-200 p-4">
+    try {
+      setLoading(true);
+      const response = await cancelTransaction();
+      
+      if (response.success) {
+        const changeDetails = Object.entries(response.data)
+          .map(([coin, count]) => `${count}x ${coin} MAD`)
+          .join(', ');
+
+        setBalance(0);
+        setCartItems([]);
+        
+        toast({
+          title: 'Transaction annulée',
+          description: `Votre monnaie a été rendue : ${changeDetails}`,
+        });
+
+        // Rafraîchir les données
+        await loadData();
+      } else {
+        toast({
+          title: 'Erreur',
+          description: response.message || 'Erreur lors de l\'annulation',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('Error canceling transaction:', error);
+      toast({
+        title: 'Erreur',
+        description: error instanceof Error ? error.message : 'Erreur lors de l\'annulation',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleQuantityChange = (productId: string, newQuantity: number) => {
+    const item = cartItems.find(item => item.product.id === productId);
+    if (!item) return;
+
+    // Si la nouvelle quantité est 0, supprimer l'article
+    if (newQuantity === 0) {
+      handleRemoveItem(productId);
+      return;
+    }
+
+    // Vérifier le stock disponible
+    const product = products.find(p => p.id === productId);
+    if (!product || newQuantity > product.stock) {
+      toast({
+        title: 'Stock insuffisant',
+        description: 'La quantité demandée n\'est pas disponible en stock.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    // Mettre à jour la quantité
+    setCartItems(prevItems =>
+      prevItems.map(item =>
+        item.product.id === productId
+          ? { ...item, quantity: newQuantity }
+          : item
+      )
+    );
+  };
+  return (    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="max-w-7xl mx-auto">
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            Bienvenu !
-          </h1>
-          <p className="text-gray-600">
-            Sélectionnez vos produits préférés en toute simplicité
-          </p>
+        <header className="text-center py-12 mb-8 bg-white rounded-xl shadow-lg border border-blue-100 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-indigo-500/10"></div>
+          <div className="relative z-10">
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 inline-block text-transparent bg-clip-text mb-4">
+              Distributeur Automatique
+            </h1>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Découvrez notre sélection de produits et profitez d'une expérience d'achat simple et rapide
+            </p>
+            <div className="flex items-center justify-center gap-2 mt-4 text-sm text-gray-500">
+              <span className="flex items-center gap-1">
+                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                Disponible 24/7
+              </span>
+              <span className="flex items-center gap-1 ml-4">
+                <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                Paiement sécurisé
+              </span>
+            </div>
+          </div>
         </header>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-1">
-            <CoinSlot 
-              balance={balance}
-              onCoinInsert={handleCoinInsert}
-              validCoins={validCoins}
-              loading={loading}
-            />
-          </div>
-          
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-3">
             <ProductCatalog
               products={products}
               balance={balance}
@@ -199,14 +284,23 @@ const Index = () => {
               onUpdateProducts={setProducts}
             />
           </div>
+          
+          <div className="lg:col-span-1 space-y-6">
+            <CoinSlot 
+              balance={balance}
+              onCoinInsert={handleCoinInsert}
+              validCoins={validCoins}
+              loading={loading}
+              onCancel={handleCancel}
+            />
 
-          <div className="lg:col-span-3">
             <TransactionSummary
               cartItems={cartItems}
               balance={balance}
               onRemoveItem={handleRemoveItem}
               onConfirmPurchase={handleConfirmPurchase}
               onClearCart={handleClearCart}
+              onQuantityChange={handleQuantityChange}
             />
           </div>
         </div>
