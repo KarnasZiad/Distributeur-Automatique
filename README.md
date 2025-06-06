@@ -77,17 +77,17 @@ Une application complète de distributeur automatique avec une interface web mod
 - Maven 3.6+
 - Node.js 18+ (pour le frontend)
 
-###  Démarrer le Backend
+##  Démarrer le Backend
 
-# Cloner le projet
+### Cloner le projet
 git clone https://github.com/KarnasZiad/Distributeur-Automatique.git
 cd Distributeur-Automatique
 
-# Compiler et lancer
+### Compiler et lancer
 mvn spring-boot:run
 
 
-###  Démarrer le Frontend
+##  Démarrer le Frontend
 
 cd frontend
 npm install
@@ -144,9 +144,9 @@ Action	Méthode	Endpoint
 
 ##  Tests unitaires
 
-```bash
 mvn test
 
+![imgDA](https://github.com/user-attachments/assets/31a1c183-ed14-4e33-82fc-3a0ff0b4ed1e)
 
 
 
