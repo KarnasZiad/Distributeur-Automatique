@@ -1,6 +1,7 @@
 package com.distributeur.controller;
 
 import com.distributeur.dto.ApiResponse;
+import com.distributeur.dto.PurchaseRequest;
 import com.distributeur.dto.PurchaseResultDto;
 import com.distributeur.dto.TransactionStatusDto;
 import com.distributeur.model.Product;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -80,10 +82,9 @@ public class VendingMachineController {
 
             BigDecimal changeAmount = transaction.getChangeAmount();
             Map<BigDecimal, Integer> changeCoins = changeService.calculateOptimalChange(changeAmount);
-            List<String> changeDisplay = changeService.formatChangeForDisplay(changeCoins);
-
+            List<String> changeDisplay = changeService.formatChangeForDisplay(changeCoins);            List<Product> productList = List.of(transaction.getSelectedProduct());
             PurchaseResultDto result = new PurchaseResultDto(
-                transaction.getSelectedProduct(),
+                productList,
                 transaction.getTotalInserted(),
                 changeAmount,
                 changeCoins,
@@ -141,6 +142,50 @@ public class VendingMachineController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.error("Erreur lors de la récupération des pièces valides: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/bulk-purchase")
+    public ResponseEntity<ApiResponse<PurchaseResultDto>> bulkPurchase(@RequestBody List<PurchaseRequest> purchases) {
+        try {            List<Product> selectedProducts = new ArrayList<>();
+
+            // Vérifier tous les produits
+            for (PurchaseRequest purchase : purchases) {
+                productService.getProductById(Long.valueOf(purchase.getProductId()))
+                    .ifPresent(selectedProducts::add);
+            }
+
+            if (selectedProducts.isEmpty()) {
+                return ResponseEntity.badRequest()
+                    .body(ApiResponse.error("Aucun produit valide trouvé"));
+            }            // Calculer le coût total
+            BigDecimal totalCost = selectedProducts.stream()
+                .map(Product::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            // Vérifier le solde
+            BigDecimal balance = transactionService.getCurrentBalance();
+            if (balance.compareTo(totalCost) < 0) {
+                return ResponseEntity.badRequest()
+                    .body(ApiResponse.error("Solde insuffisant pour l'achat total"));
+            }
+
+            // Effectuer la transaction
+            Transaction transaction = transactionService.processMultipleProducts(selectedProducts);
+
+            // Préparer le résultat
+            PurchaseResultDto result = new PurchaseResultDto(
+                selectedProducts,
+                transaction.getTotalInserted(),
+                transaction.getChangeAmount(),
+                changeService.calculateOptimalChange(transaction.getChangeAmount()),
+                changeService.formatChangeForDisplay(changeService.calculateOptimalChange(transaction.getChangeAmount()))
+            );
+
+            return ResponseEntity.ok(ApiResponse.success("Achats effectués avec succès", result));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                .body(ApiResponse.error(e.getMessage()));
         }
     }
 

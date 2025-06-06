@@ -178,3 +178,19 @@ export async function fetchValidCoins() {
     throw error;
   }
 }
+
+export async function bulkPurchase(items: { productId: string }[]) {
+  const response = await fetch(`${API_BASE}/bulk-purchase`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(items),
+  });
+
+  const data = await response.json();
+  if (!data.success) {
+    throw new Error(data.message || 'Erreur lors de l\'achat');
+  }
+  return data;
+}

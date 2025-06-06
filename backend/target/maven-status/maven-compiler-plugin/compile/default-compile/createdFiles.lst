@@ -5,6 +5,7 @@ com\distributeur\service\StatisticsService.class
 com\distributeur\dto\TransactionStatusDto.class
 com\distributeur\dto\PurchaseResultDto.class
 com\distributeur\service\CoinService.class
+com\distributeur\dto\PurchaseRequest.class
 com\distributeur\dto\StatisticsDto.class
 com\distributeur\service\ProductService.class
 com\distributeur\model\Product.class

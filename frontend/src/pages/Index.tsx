@@ -9,7 +9,8 @@ import {
   fetchBalance,
   insertCoin,
   selectProduct,
-  fetchValidCoins
+  fetchValidCoins,
+  bulkPurchase
 } from '@/api/vending';
 
 const Index = () => {
@@ -132,29 +133,27 @@ const Index = () => {
     try {
       setLoading(true);
 
-      // Effectuer l'achat pour chaque produit dans le panier
-      for (const item of cartItems) {
-        for (let i = 0; i < item.quantity; i++) {
-          const result = await selectProduct(item.product.id);
-          
-          if (!result.success) {
-            throw new Error(`Erreur lors de l'achat de ${item.product.name}`);
-          }
-        }
-      }
+      // Préparer les items pour l'achat en bloc
+      const purchaseItems = cartItems.flatMap(item => 
+        Array(item.quantity).fill({ productId: item.product.id })
+      );
 
-      // Rafraîchir les données
-      await loadData();
+      // Effectuer l'achat en bloc
+      const result = await bulkPurchase(purchaseItems);
       
-      // Vider le panier après l'achat réussi
-      setCartItems([]);
+      if (result.success) {
+        // Rafraîchir les données
+        await loadData();
+        
+        // Vider le panier après l'achat réussi
+        setCartItems([]);
 
-      toast({
-        title: 'Achat réussi',
-        description: 'Tous vos produits ont été distribués',
-        variant: 'success'
-      });
-
+        toast({
+          title: 'Achat réussi',
+          description: 'Tous vos produits ont été distribués',
+          variant: 'success'
+        });
+      }
     } catch (error: any) {
       console.error('Purchase error:', error);
       toast({ 

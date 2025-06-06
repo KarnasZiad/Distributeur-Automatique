@@ -36,6 +36,11 @@ public class Transaction {
     @Column(name = "coin_value", precision = 10, scale = 2)
     private List<BigDecimal> insertedCoins = new ArrayList<>();
     
+    @ManyToMany
+    private List<Product> selectedProducts = new ArrayList<>();
+
+    private BigDecimal changeAmount = BigDecimal.ZERO;
+    
     // Constructeurs
     public Transaction() {}
     
@@ -96,6 +101,10 @@ public class Transaction {
         this.insertedCoins = insertedCoins;
     }
     
+    public List<Product> getSelectedProducts() {
+        return selectedProducts;
+    }
+
     // Méthodes utilitaires
     public void addCoin(BigDecimal coinValue) {
         insertedCoins.add(coinValue);
@@ -116,6 +125,17 @@ public class Transaction {
         return totalInserted.compareTo(product.getPrice()) >= 0;
     }
     
+    public void addProducts(List<Product> products) {
+        if (selectedProducts == null) {
+            selectedProducts = new ArrayList<>();
+        }
+        selectedProducts.addAll(products);
+    }
+
+    public void setChange(BigDecimal amount) {
+        this.changeAmount = amount;
+    }
+
     public BigDecimal getChangeAmount() {
         if (selectedProduct != null) {
             return totalInserted.subtract(selectedProduct.getPrice());

@@ -4,10 +4,13 @@ import com.distributeur.model.Product;
 import com.distributeur.model.Transaction;
 import com.distributeur.model.TransactionStatus;
 import com.distributeur.repository.TransactionRepository;
+import com.distributeur.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,6 +28,9 @@ public class TransactionService {
     
     @Autowired
     private ChangeService changeService;
+    
+    @Autowired
+    private ProductRepository productRepository;
     
     public Transaction getCurrentTransaction() {
         Optional<Transaction> transaction = transactionRepository
@@ -118,5 +124,33 @@ public class TransactionService {
     public BigDecimal getCurrentBalance() {
         Transaction transaction = getCurrentTransaction();
         return transaction.getTotalInserted();
+    }
+    
+    @Transactional
+    public Transaction processMultipleProducts(List<Product> products) {
+        Transaction transaction = getCurrentTransaction();
+        BigDecimal totalCost = products.stream()
+            .map(Product::getPrice)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        if (transaction.getTotalInserted().compareTo(totalCost) < 0) {
+            throw new IllegalStateException("Solde insuffisant");
+        }
+
+        // Process each product
+        for (Product product : products) {
+            if (product.getQuantity() <= 0) {
+                throw new IllegalStateException("Produit en rupture: " + product.getName());
+            }
+            product.setQuantity(product.getQuantity() - 1);
+            productRepository.save(product);
+        }
+
+        // Update transaction
+        transaction.addProducts(products);
+        transaction.setChange(transaction.getTotalInserted().subtract(totalCost));
+        transaction.complete();
+
+        return transactionRepository.save(transaction);
     }
 }
