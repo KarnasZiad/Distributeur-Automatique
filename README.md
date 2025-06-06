@@ -166,9 +166,7 @@ Action	Méthode	Endpoint
 mvn test
 
 
-##  Interface Web
 
-![imgDA](https://github.com/user-attachments/assets/b5bb8b1d-2976-4143-8f36-26097c17f2a7)
 
 
 
