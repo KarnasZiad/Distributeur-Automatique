@@ -69,25 +69,8 @@ Une application complète de distributeur automatique avec une interface web mod
 
 ---
 
-##  Structure du Backend
 
-src/
-├── main/
-│ ├── java/com/distributeur/
-│ │ ├── controller/ # Contrôleurs REST
-│ │ ├── service/ # Logique métier
-│ │ ├── model/ # Entités JPA
-│ │ ├── repository/ # Interfaces JPA
-│ │ ├── dto/ # Data Transfer Objects
-│ │ └── config/ # Configuration
-│ └── resources/
-│ └── application.properties
-└── test/ # Tests unitaires
-
-
----
-
-## ⚙ Installation & Démarrage
+## Installation & Démarrage
 
 ###  Prérequis
 - Java 17+
@@ -96,16 +79,15 @@ src/
 
 ###  Démarrer le Backend
 
-```bash
 # Cloner le projet
-git clone <YOUR_GIT_URL>
+git clone https://github.com/KarnasZiad/Distributeur-Automatique.git
 cd Distributeur-Automatique
 
 # Compiler et lancer
 mvn spring-boot:run
 
 
-### ▶ Démarrer le Frontend
+###  Démarrer le Frontend
 
 cd frontend
 npm install
