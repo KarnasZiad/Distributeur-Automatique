@@ -142,9 +142,57 @@ Action	Méthode	Endpoint
 
 ---
 
-##  Tests unitaires
+###  Tests unitaires
 
 mvn test
+
+
+##  Interface Web
+
+###  Structure de l'interface
+
+#### En-tête
+- Icône du distributeur
+- Solde affiché en temps réel
+- Statut dynamique (ex : `"Prêt"`, `"Achat en cours"`, `"Transaction annulée"`)
+
+#### Produits
+- Grille responsive de cartes produits
+- 3 États visuels :
+  - ✅ **Disponible** (bordure verte)
+  - ⚠️ **Solde insuffisant** (bordure orange)
+  - ❌ **Rupture de stock** (bordure rouge)
+
+#### Panneau de contrôle
+- Boutons de pièces : `0.5`, `1`, `2`, `5`, `10 MAD`
+- Boutons d’action : `Annuler`, `Actualiser`
+- Historique des pièces insérées
+
+---
+
+###  Flux utilisateur
+
+#### 🟢 État initial
+- Solde = `0.00 MAD`
+- Statut : `"Prêt"`
+- Produits tous non accessibles
+
+#### ➕ Insertion
+- Animation sur le bouton de pièce
+- Mise à jour du solde
+- Produits accessibles deviennent cliquables
+
+#### 🛒 Achat
+- Clic sur un produit
+- Modal de confirmation avec animation (spinner)
+
+#### ✅ Résultat
+- Détail de l’achat :
+  - Produit acheté
+  - Montant payé
+  - Monnaie rendue (ex: `2.0 MAD + 0.5 MAD`)
+- Réinitialisation automatique du solde
+
 
 ![imgDA](https://github.com/user-attachments/assets/31a1c183-ed14-4e33-82fc-3a0ff0b4ed1e)
 
